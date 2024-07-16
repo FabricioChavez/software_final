@@ -1,20 +1,20 @@
-# app.py
+
 from flask import Flask, request, jsonify
 from models import Cuenta, Operacion
 
 app = Flask(__name__)
 
-# Almacenamiento en memoria de las cuentas
+
 cuentas = {
     "21345": Cuenta("21345", "Arnaldo", 200, ["123", "456"]),
     "123": Cuenta("123", "Luisa", 400, ["456"]),
     "456": Cuenta("456", "Andrea", 300, ["21345"])
 }
 
-# Almacenamiento en memoria de las operaciones
+
 operaciones = []
 
-# Ruta para listar los contactos de una cuenta
+
 @app.route('/billetera/contactos', methods=['GET'])
 def listar_contactos():
     numero = request.args.get('minumero')
@@ -25,7 +25,7 @@ def listar_contactos():
     else:
         return "Cuenta no encontrada", 404
 
-# Ruta para realizar un pago
+
 @app.route('/billetera/pagar', methods=['POST'])
 def pagar():
     numero_origen = request.args.get('minumero')
@@ -40,7 +40,6 @@ def pagar():
             operacion = cuenta_origen.enviar_dinero(numero_destino, valor)
             cuenta_destino.saldo += valor
             
-            # Agregar operación a la lista de operaciones
             operaciones.append(operacion)
 
             return f"Realizado en {operacion.fecha.strftime('%d/%m/%Y')}.", 200
@@ -51,7 +50,7 @@ def pagar():
     else:
         return "El contacto no está en la lista de contactos.", 400
 
-# Ruta para mostrar el historial de una cuenta
+
 @app.route('/billetera/historial', methods=['GET'])
 def historial():
     numero = request.args.get('minumero')
